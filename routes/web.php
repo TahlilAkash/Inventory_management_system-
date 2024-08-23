@@ -18,3 +18,4 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 Route::post('/user-registration',[UserController::class,'UserRegistration'])->name('user.registration');
+Route::post('/user-login',[UserController::class,'UserLogin'])->name('user.login');
