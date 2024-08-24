@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Helper\JWTToken;
+use App\Mail\OTPMail;
 use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -36,28 +38,49 @@ class UserController extends Controller
 
     public function UserLogin(Request $request)
     {
-        $count=User::where('email','=',$request->input('email'))
-        ->where('password','=',$request->input('password'))
-        ->count();
+        $count = User::where('email', '=', $request->input('email'))
+            ->where('password', '=', $request->input('password'))
+            ->count();
 
-        if($count==1){
+        if ($count == 1) {
             //user login -> JWT token issue 
-            $token=JWTToken::CreateToken($request->input('email'));
+            $token = JWTToken::CreateToken($request->input('email'));
 
             return response()->json([
                 'status' => "success",
                 'message' => "user login successfully",
                 'token' => $token,
             ]);
-    
-        }
-        else{
+        } else {
             return response()->json([
                 'status' => "failed",
                 'message' => "user login failed",
             ]);
-    
         }
     }
-    
+
+    public function SendOTPCode(Request $request)
+    {
+        $email = $request->input('email');
+        $otp = rand(1000, 9999);
+        $count = User::where('email', '=', $email)->count();
+
+        if ($count == 1) {
+            //send otp to email address
+            Mail::to($email)->send(new OTPMail($otp));
+
+            //inset that otp in database user table...
+            User::where('email', '=', $email)->update(['otp' => $otp]);
+            return response()->json([
+                'status' => "success",
+                'message' => "otp send successfully",
+            ]);
+
+        } else {
+            return response()->json([
+                'status' => "failed",
+                'message' => "user not found",
+            ]);
+        }
+    }
 }
