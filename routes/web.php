@@ -21,3 +21,4 @@ Route::post('/user-registration',[UserController::class,'UserRegistration'])->na
 Route::post('/user-login',[UserController::class,'UserLogin'])->name('user.login');
 
 Route::post('/send-otp',[UserController::class,'SendOTPCode']);
+Route::post('/verify-otp',[UserController::class,'VerifyOTP']);
