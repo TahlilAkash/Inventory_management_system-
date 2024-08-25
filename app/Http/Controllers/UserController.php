@@ -104,9 +104,27 @@ class UserController extends Controller
         }else{
             return response()->json([
                 'status' => "failed",
-                'message' => "unauthorized access",
+                'message' => "unauthorized",
             ]);
 
+        }
+    }
+
+    public function ResetPassword(Request $request){
+        try{
+            $email=$request->header('email');
+            $password=$request->input('password');
+            User::where('email','=',$email)->update(['password'=>$password]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Request Successful',
+            ]);
+
+        }catch (Exception $exception){
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'Something Went Wrong',
+            ]);
         }
     }
 }
