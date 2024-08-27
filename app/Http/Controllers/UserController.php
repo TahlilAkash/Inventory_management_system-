@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
+    // View Pages
+
+    public function LoginPage(){
+        return view('pages.auth.login-page');
+    }
+
     public function UserRegistration(Request $request)
     {
         try {
