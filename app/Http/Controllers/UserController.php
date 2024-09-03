@@ -17,7 +17,10 @@ class UserController extends Controller
     {
         return view('pages.auth.login-page');
     }
-
+     public function RegistrationPage()
+    {
+        return view('pages.auth.registration-page');
+    }
     public function UserRegistration(Request $request)
     {
         try {
@@ -63,8 +66,7 @@ class UserController extends Controller
                 'status' => "success",
                 'message' => "user login successfully",
                 'token' => $token,
-            ],200)->cookie('token',$token,time()+60*24*30);
-
+            ], 200)->cookie('token', $token, time() + 60 * 24 * 30);
         } else {
             return response()->json([
                 'status' => "failed",
