@@ -21,6 +21,12 @@ class UserController extends Controller
     {
         return view('pages.auth.registration-page');
     }
+    function SendOtpPage(){
+        return view('pages.auth.send-otp-page');
+    }
+    function VerifyOTPPage(){
+        return view('pages.auth.verify-otp-page');
+    }
     public function UserRegistration(Request $request)
     {
         try {
