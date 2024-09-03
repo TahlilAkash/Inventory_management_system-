@@ -13,7 +13,8 @@ class UserController extends Controller
 {
     // View Pages
 
-    public function LoginPage(){
+    public function LoginPage()
+    {
         return view('pages.auth.login-page');
     }
 
@@ -52,18 +53,26 @@ class UserController extends Controller
             //user login -> JWT token issue 
             $token = JWTToken::CreateToken($request->input('email'));
 
+            // $cookie = cookie('jwt_token', $token, 60, null, null, false, true); // 60 minutes expiry, HttpOnly flag enabled
+            // return response()->json([
+            //     'status' => "success",
+            //     'message' => "user login successfully",
+            // ], 200)->cookie($cookie);
+
             return response()->json([
                 'status' => "success",
                 'message' => "user login successfully",
                 'token' => $token,
-            ]);
+            ],200)->cookie('token',$token,time()+60*24*30);
+
         } else {
             return response()->json([
                 'status' => "failed",
                 'message' => "user login failed",
-            ]);
+            ], 401);
         }
     }
+
 
     public function SendOTPCode(Request $request)
     {
@@ -81,7 +90,6 @@ class UserController extends Controller
                 'status' => "success",
                 'message' => "otp send successfully",
             ]);
-
         } else {
             return response()->json([
                 'status' => "failed",
@@ -92,41 +100,40 @@ class UserController extends Controller
 
     public function VerifyOTP(Request $request)
     {
-        $email=$request->input('email');
-        $otp=$request->input('otp');
-        $count=User::where('email','=',$email)
-        ->where('otp','=',$otp)->count();
-        if($count==1){
+        $email = $request->input('email');
+        $otp = $request->input('otp');
+        $count = User::where('email', '=', $email)
+            ->where('otp', '=', $otp)->count();
+        if ($count == 1) {
             // Database otp update
 
-            User::where('email','=',$email)->update(['otp'=>'0']);
+            User::where('email', '=', $email)->update(['otp' => '0']);
             //pass reset the token issue
-            $token=JWTToken::CreateTokenForSetPassword($request->input('email'));
+            $token = JWTToken::CreateTokenForSetPassword($request->input('email'));
             return response()->json([
                 'status' => "success",
                 'message' => "otp verification successful",
                 'token' => $token,
             ]);
-        }else{
+        } else {
             return response()->json([
                 'status' => "failed",
                 'message' => "unauthorized",
             ]);
-
         }
     }
 
-    public function ResetPassword(Request $request){
-        try{
-            $email=$request->header('email');
-            $password=$request->input('password');
-            User::where('email','=',$email)->update(['password'=>$password]);
+    public function ResetPassword(Request $request)
+    {
+        try {
+            $email = $request->header('email');
+            $password = $request->input('password');
+            User::where('email', '=', $email)->update(['password' => $password]);
             return response()->json([
                 'status' => 'success',
                 'message' => 'Request Successful',
             ]);
-
-        }catch (Exception $exception){
+        } catch (Exception $e) {
             return response()->json([
                 'status' => 'fail',
                 'message' => 'Something Went Wrong',

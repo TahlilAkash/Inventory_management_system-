@@ -16,22 +16,19 @@ class TokenVerificationMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $token = $request->header('token');
-        $result=JWTToken::VerifyToken($token);
-        if($result=="unauthorized"){
+     
+        // $token = $request->cookie('jwt_token');
+        $token = $request->cookie('token');
+        $result = JWTToken::VerifyToken($token);
+
+        if ($result == "unauthorized") {
             return response([
                 'status' => "failed",
                 'message' => "unauthorized access",
             ]);
-            
+        } else {
+            $request->headers->set('email', $result->userEmail);
+            return $next($request);
         }
-        else
-            {
-                $request->headers->set('email', $result);
-                return $next($request);
-
-            }
-
-
     }
 }

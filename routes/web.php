@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\TokenVerificationMiddleware;
 
 /*
@@ -28,3 +29,4 @@ Route::post('/reset-password',[UserController::class,'ResetPassword'])->middlewa
 
 // Page Routes 
 Route::get('/userLogin',[UserController::class,'LoginPage'] );
+Route::get('/dashboard',[DashboardController::class,'DashboardPage'])->middleware([TokenVerificationMiddleware::class]);
