@@ -9,6 +9,7 @@
                         <div class="row m-0 p-0">
                             <div class="col-md-4 p-2">
                                 <label>Email Address</label>
+                                {{-- user er email  change krte parbe nah only read mood --}}
                                 <input readonly id="email" placeholder="User Email" class="form-control" type="email"/>
                             </div>
                             <div class="col-md-4 p-2">
