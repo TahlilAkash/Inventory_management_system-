@@ -46,7 +46,7 @@ class JWTToken
     // --------------------------------------------------
     
     //verify otp
-    public static function CreateTokenForSetPassword($userEmail): string
+    public static function CreateTokenForSetPassword($userEmail): string | object
     {
         $key = env('JWT_KEY');
         $payload = [

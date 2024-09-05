@@ -17,15 +17,21 @@ class UserController extends Controller
     {
         return view('pages.auth.login-page');
     }
-     public function RegistrationPage()
+    public function RegistrationPage()
     {
         return view('pages.auth.registration-page');
     }
-    function SendOtpPage(){
+    public function SendOtpPage()
+    {
         return view('pages.auth.send-otp-page');
     }
-    function VerifyOTPPage(){
+    public function VerifyOTPPage()
+    {
         return view('pages.auth.verify-otp-page');
+    }
+    public function ResetPasswordPage()
+    {
+        return view('pages.auth.reset-pass-page');
     }
     public function UserRegistration(Request $request)
     {
@@ -133,6 +139,7 @@ class UserController extends Controller
 
     public function ResetPassword(Request $request)
     {
+        
         try {
             $email = $request->header('email');
             $password = $request->input('password');
@@ -140,7 +147,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Request Successful',
-            ]);
+            ], 200);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 'fail',
