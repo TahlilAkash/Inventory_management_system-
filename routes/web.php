@@ -23,17 +23,17 @@ use App\Http\Middleware\TokenVerificationMiddleware;
 Route::post('/user-registration',[UserController::class,'UserRegistration'])->name('user.registration');
 Route::post('/user-login',[UserController::class,'UserLogin'])->name('user.login');
 
-Route::post('/send-otp',[UserController::class,'SendOTPCode']);
-Route::post('/verify-otp',[UserController::class,'VerifyOTP']);
+Route::post('/send-otp',[UserController::class,'SendOTPCode'])->middleware([TokenVerificationMiddleware::class]);
+Route::post('/verify-otp',[UserController::class,'VerifyOTP'])->middleware([TokenVerificationMiddleware::class]);
 Route::post('/reset-password',[UserController::class,'ResetPassword'])->middleware([TokenVerificationMiddleware::class]);
-Route::get('/logout',[UserController::class,'UserLogout']);
+Route::get('/logout',[UserController::class,'UserLogout'])->middleware([TokenVerificationMiddleware::class]);
 
 // Page Routes 
 Route::get('/userLogin',[UserController::class,'LoginPage'] );
 Route::get('/dashboard',[DashboardController::class,'DashboardPage'])->middleware([TokenVerificationMiddleware::class]);
 Route::get('/userRegistration',[UserController::class,'RegistrationPage']);
-Route::get('/sendOtp',[UserController::class,'SendOtpPage']);
-Route::get('/verifyOtp',[UserController::class,'VerifyOTPPage']);
-Route::get('/resetPassword',[UserController::class,'ResetPasswordPage']);
+Route::get('/sendOtp',[UserController::class,'SendOtpPage'])->middleware([TokenVerificationMiddleware::class]);
+Route::get('/verifyOtp',[UserController::class,'VerifyOTPPage'])->middleware([TokenVerificationMiddleware::class]);
+Route::get('/resetPassword',[UserController::class,'ResetPasswordPage'])->middleware([TokenVerificationMiddleware::class]);
 
 

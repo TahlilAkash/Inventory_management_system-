@@ -62,18 +62,14 @@ class UserController extends Controller
     {
         $count = User::where('email', '=', $request->input('email'))
             ->where('password', '=', $request->input('password'))
-            ->count();
+            ->select('id')->first();
+            // ->count();
 
-        if ($count == 1) {
+
+        if ($count !== null) {
             //user login -> JWT token issue 
-            $token = JWTToken::CreateToken($request->input('email'));
-
+            $token = JWTToken::CreateToken($request->input('email'),$count->id);
             // $cookie = cookie('jwt_token', $token, 60, null, null, false, true); // 60 minutes expiry, HttpOnly flag enabled
-            // return response()->json([
-            //     'status' => "success",
-            //     'message' => "user login successfully",
-            // ], 200)->cookie($cookie);
-
             return response()->json([
                 'status' => "success",
                 'message' => "user login successfully",
@@ -85,6 +81,9 @@ class UserController extends Controller
                 'message' => "user login failed",
             ], 401);
         }
+    }
+    public function UserLogout(){
+        return redirect('/')->cookie('token','',-1);
     }
 
 
@@ -156,7 +155,5 @@ class UserController extends Controller
         }
     }
 
-    public function UserLogout(){
-        return redirect('/')->cookie('token','',-1);
-    }
+    
 }
